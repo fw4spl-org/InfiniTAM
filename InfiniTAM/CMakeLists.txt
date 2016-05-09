@@ -1,7 +1,5 @@
-cmake_minimum_required(VERSION 2.8)
-project(InfiniTAM)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+set(ITM_CMAKE_RESOURCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ITM_CMAKE_RESOURCE_PATH})
 
 macro(CANONIFY_BOOL var)
   if (${var})
@@ -35,7 +33,7 @@ CANONIFY_BOOL(PNG_FOUND)
 message(STATUS "libpng found: ${PNG_FOUND}")
 
 OPTION(WITH_CUDA "Build with CUDA support?" ${CUDA_FOUND})
-INCLUDE(${PROJECT_SOURCE_DIR}/cmake/UseOpenMP.cmake)
+INCLUDE(${ITM_CMAKE_RESOURCE_PATH}/UseOpenMP.cmake)
 OPTION(WITH_REALSENSE "Build with Intel RealSense support?" ${REALSENSE_FOUND})
 
 IF(MSVC)

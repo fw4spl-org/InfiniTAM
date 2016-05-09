@@ -201,7 +201,7 @@ SOURCE_GROUP(Utils FILES ${ITMLIB_UTILS_SOURCES} ${ITMLIB_UTILS_HEADERS})
 
 if(WITH_CUDA)
   if(NOT DEFINED CUDA_COMPUTE_CAPABILITY)
-    include(${PROJECT_SOURCE_DIR}/cmake/CUDACheckCompute.cmake)
+    include(${ITM_CMAKE_RESOURCE_PATH}/CUDACheckCompute.cmake)
   endif()
   set(CUDA_ARCH ${CUDA_COMPUTE_CAPABILITY} CACHE STRING "CUDA architectures to compile for")
   string(REPLACE " " ";" CUDA_ARCH_LIST ${CUDA_ARCH})
