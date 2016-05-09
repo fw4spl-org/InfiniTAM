@@ -3,6 +3,9 @@
 #include "UIEngine.h"
 
 #include <string.h>
+
+#ifndef COMPILE_WITHOUT_GLUT
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
@@ -498,3 +501,5 @@ void UIEngine::Shutdown()
 	delete instance;
 	instance = NULL;
 }
+
+#endif //COMPILE_WITHOUT_GLUT

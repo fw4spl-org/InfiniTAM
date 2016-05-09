@@ -9,8 +9,11 @@ macro(CANONIFY_BOOL var)
   endif()
 endmacro()
 
-find_package(GLUT REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(GLUT QUIET)
+CANONIFY_BOOL(GLUT_FOUND)
+message(STATUS "glut found: ${GLUT_FOUND}")
+option(WITH_GLUT "Build UI engine using libGLUT" ${GLUT_FOUND})
 
 find_package(CUDA QUIET)
 CANONIFY_BOOL(CUDA_FOUND)
@@ -65,13 +68,19 @@ ELSE()
   add_definitions(-DCOMPILE_WITHOUT_CUDA)
 ENDIF()
 
+
 add_executable(InfiniTAM_cli InfiniTAM_cli.cpp)
 target_link_libraries(InfiniTAM_cli Engine Utils)
 
-add_executable(InfiniTAM InfiniTAM.cpp)
-target_link_libraries(InfiniTAM Engine Utils)
+set(INFINITAM_DEMO InfiniTAM_cli)
 
-install(TARGETS InfiniTAM_cli InfiniTAM
+if(WITH_GLUT)
+    add_executable(InfiniTAM InfiniTAM.cpp)
+    target_link_libraries(InfiniTAM Engine Utils)
+    list(APPEND INFINITAM_DEMO InfiniTAM)
+endif()
+
+install(TARGETS ${INFINITAM_DEMO}
           RUNTIME DESTINATION bin
           ARCHIVE DESTINATION lib
           LIBRARY DESTINATION lib)

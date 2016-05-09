@@ -1,81 +1,84 @@
 include_directories(${OPENGL_INCLUDE_DIR})
-include_directories(${GLUT_INCLUDE_DIR})
 
-IF(WITH_CUDA)
+if(WITH_GLUT)
+    include_directories(${GLUT_INCLUDE_DIR})
+else()
+    add_definitions(-DCOMPILE_WITHOUT_GLUT)
+endif()
+
+if(WITH_CUDA)
   include_directories(${CUDA_INCLUDE_DIRS})
-ELSE()
+else()
   add_definitions(-DCOMPILE_WITHOUT_CUDA)
-ENDIF()
+endif()
 
-IF(OPENNI_FOUND)
+if(OPENNI_FOUND)
   include_directories(${OpenNI_INCLUDE_DIR})
-ELSE(OPENNI_FOUND)
+else()
   add_definitions(-DCOMPILE_WITHOUT_OpenNI)
-ENDIF(OPENNI_FOUND)
+endif()
 
-IF(MSKINECTAPI_FOUND)
+if(MSKINECTAPI_FOUND)
   include_directories(${MSKINECTAPI_INCLUDE_DIR})
-ELSE(MSKINECTAPI_FOUND)
+else()
   add_definitions(-DCOMPILE_WITHOUT_Kinect2)
-ENDIF(MSKINECTAPI_FOUND)
+endif()
 
-IF(DEFINED libuvc_INCLUDE_DIRS)
+if(DEFINED libuvc_INCLUDE_DIRS)
   include_directories(${libuvc_INCLUDE_DIRS})
   add_definitions(-DCOMPILE_WITH_LibUVC)
-ENDIF()
+endif()
 
-IF(WITH_REALSENSE)
+if(WITH_REALSENSE)
   include_directories(${RealSense_INCLUDE_DIR})
   add_definitions(-DCOMPILE_WITH_RealSense)
   SET_PROPERTY(SOURCE RealSenseEngine.cpp PROPERTY COMPILE_FLAGS -std=c++11)
-ENDIF()
+endif()
 
-add_library(Engine
-ImageSourceEngine.cpp
-ImageSourceEngine.h
-IMUSourceEngine.cpp
-IMUSourceEngine.h
-Kinect2Engine.cpp
-Kinect2Engine.h
-OpenNIEngine.cpp
-OpenNIEngine.h
-LibUVCEngine.cpp
-LibUVCEngine.h
-UIEngine.cpp
-UIEngine.h
-CLIEngine.cpp
-CLIEngine.h
-RealSenseEngine.cpp
-RealSenseEngine.h
+set(ITMLIB_ENGINE_HEADERS
+    ImageSourceEngine.h
+    IMUSourceEngine.h
+    Kinect2Engine.h
+    OpenNIEngine.h
+    LibUVCEngine.h
+    UIEngine.h
+    CLIEngine.h
+    RealSenseEngine.h
+)
+set(ITMLIB_ENGINE_SOURCES
+    ImageSourceEngine.cpp
+    IMUSourceEngine.cpp
+    Kinect2Engine.cpp
+    OpenNIEngine.cpp
+    LibUVCEngine.cpp
+    UIEngine.cpp
+    CLIEngine.cpp
+    RealSenseEngine.cpp
 )
 
-target_link_libraries(Engine ${GLUT_LIBRARIES})
+add_library(Engine ${ITMLIB_ENGINE_SOURCES} ${ITMLIB_ENGINE_HEADERS})
+
+if(WITH_GLUT)
+    target_link_libraries(Engine ${GLUT_LIBRARIES})
+endif()
 target_link_libraries(Engine ${OPENGL_LIBRARIES})
 target_link_libraries(Engine ITMLib)
-IF(WITH_CUDA)
+if(WITH_CUDA)
   target_link_libraries(Engine ${CUDA_LIBRARY})
-ENDIF()
-IF(OPENNI_FOUND)
+endif()
+if(OPENNI_FOUND)
   target_link_libraries(Engine ${OpenNI_LIBRARY})
-ENDIF(OPENNI_FOUND)
-IF(DEFINED libuvc_LIBRARIES)
+endif(OPENNI_FOUND)
+if(DEFINED libuvc_LIBRARIES)
   target_link_libraries(Engine ${libuvc_LIBRARIES})
-ENDIF()
-IF(WITH_REALSENSE)
+endif()
+if(WITH_REALSENSE)
   TARGET_LINK_LIBRARIES(Engine ${RealSense_LIBRARY})
-ENDIF()
+endif()
 
 install(TARGETS Engine
           RUNTIME DESTINATION bin/InfiniTAM
           ARCHIVE DESTINATION lib/InfiniTAM
           LIBRARY DESTINATION lib/InfiniTAM)
-install(FILES
-        ImageSourceEngine.h
-        IMUSourceEngine.h
-        Kinect2Engine.h
-        OpenNIEngine.h
-        LibUVCEngine.h
-        UIEngine.h
-        CLIEngine.h
-        RealSenseEngine.h
+install(FILES ${ITMLIB_ENGINE_HEADERS}
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include/InfiniTAM/Engine)
