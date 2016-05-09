@@ -20,3 +20,11 @@ IF(PNG_FOUND)
   target_link_libraries(Utils ${PNG_LIBRARIES})
 ENDIF()
 
+install(TARGETS Utils
+          RUNTIME DESTINATION bin/InfiniTAM
+          ARCHIVE DESTINATION lib/InfiniTAM
+          LIBRARY DESTINATION lib/InfiniTAM)
+install(FILES
+        FileUtils.h
+        NVTimer.h
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/InfiniTAM/Utils)

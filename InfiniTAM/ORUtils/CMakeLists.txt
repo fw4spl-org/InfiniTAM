@@ -51,3 +51,12 @@ ELSE()
 ENDIF()
 
 #target_link_libraries(ITMLib Utils)
+
+install(TARGETS ORUtils
+          RUNTIME DESTINATION bin/InfiniTAM
+          ARCHIVE DESTINATION lib/InfiniTAM
+          LIBRARY DESTINATION lib/InfiniTAM)
+install(FILES
+        ${ORUTILS_HEADERS}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/InfiniTAM/ORUtils)
+        

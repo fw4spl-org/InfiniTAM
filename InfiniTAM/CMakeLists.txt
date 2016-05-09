@@ -68,9 +68,12 @@ ELSE()
 ENDIF()
 
 add_executable(InfiniTAM_cli InfiniTAM_cli.cpp)
-target_link_libraries(InfiniTAM_cli Engine)
-target_link_libraries(InfiniTAM_cli Utils)
-add_executable(InfiniTAM InfiniTAM.cpp)
-target_link_libraries(InfiniTAM Engine)
-target_link_libraries(InfiniTAM Utils)
+target_link_libraries(InfiniTAM_cli Engine Utils)
 
+add_executable(InfiniTAM InfiniTAM.cpp)
+target_link_libraries(InfiniTAM Engine Utils)
+
+install(TARGETS InfiniTAM_cli InfiniTAM
+          RUNTIME DESTINATION bin
+          ARCHIVE DESTINATION lib
+          LIBRARY DESTINATION lib)

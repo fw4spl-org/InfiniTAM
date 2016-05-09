@@ -65,3 +65,17 @@ IF(WITH_REALSENSE)
   TARGET_LINK_LIBRARIES(Engine ${RealSense_LIBRARY})
 ENDIF()
 
+install(TARGETS Engine
+          RUNTIME DESTINATION bin/InfiniTAM
+          ARCHIVE DESTINATION lib/InfiniTAM
+          LIBRARY DESTINATION lib/InfiniTAM)
+install(FILES
+        ImageSourceEngine.h
+        IMUSourceEngine.h
+        Kinect2Engine.h
+        OpenNIEngine.h
+        LibUVCEngine.h
+        UIEngine.h
+        CLIEngine.h
+        RealSenseEngine.h
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/InfiniTAM/Engine)
